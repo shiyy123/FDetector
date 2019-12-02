@@ -13,12 +13,13 @@ import java.util.List;
  */
 public class Detection {
 
-    public static void cloneDetection(List<File> word2vecFeatureFileList1, List<File> hopeFeatureFileList1,
-                                      List<File> word2vecFeatureFileList2, List<File> hopeFeatureFileList2) {
+    public static void singleFileCloneDetection(List<File> word2vecFeatureFileList1, List<File> hopeFeatureFileList1,
+                                                List<File> word2vecFeatureFileList2, List<File> hopeFeatureFileList2) {
         int len1 = word2vecFeatureFileList1.size(), len2 = word2vecFeatureFileList2.size();
         for (int i = 0; i < len1; i++) {
             File word2vec1 = word2vecFeatureFileList1.get(i);
             File hope1 = hopeFeatureFileList1.get(i);
+
             List<Double> word2vecVec1 = Word2Vec.getVecFromEmbeddingFile(word2vec1);
             List<Double> hopeVec1 = HOPE.getVecFromEmbeddingFile(hope1);
             List<Double> feature1 = new ArrayList<>(word2vecVec1);
@@ -34,11 +35,20 @@ public class Detection {
                 List<Double> feature2 = new ArrayList<>(word2vecVec2);
                 feature2.addAll(hopeVec2);
 
+                if (isClone(feature1, feature2)) {
+                    System.out.println("is clone");
+                } else {
+                    System.out.println("not clone");
+                }
+
             }
         }
     }
 
     private static boolean isClone(List<Double> feature1, List<Double> feature2) {
-        return true;
+        if (feature1.size() == feature2.size()) {
+            return true;
+        }
+        return false;
     }
 }

@@ -1,5 +1,6 @@
 package main;
 
+import detection.Detection;
 import embedding.HOPE;
 import embedding.Word2Vec;
 import feature.Feature;
@@ -42,7 +43,8 @@ public class CLI {
         CLI cli = new CLI();
 
         options.addOption("H", "Help", false, "Print help message");
-        options.addOption("F", "File", true, "The path of the file to scan");
+        options.addOption("F1", "File1", true, "The path of the file to scan");
+        options.addOption("F2", "File2", true, "The path of the file to scan");
 
         CommandLineParser commandLineParser = new DefaultParser();
         CommandLine commandLine = null;
@@ -54,10 +56,33 @@ public class CLI {
         assert commandLine != null;
         if (commandLine.hasOption("H")) {
             cli.printHelp();
+            return;
         }
-        String path = commandLine.getOptionValue("F");
-        File scanFile = new File(path);
+        String path1 = commandLine.getOptionValue("F1");
+        File scanFolder1 = new File(path1);
+        File[] scanFiles1 = scanFolder1.listFiles();
 
+        String path2 = commandLine.getOptionValue("F2");
+        File scanFolder2 = new File(path2);
+        File[] scanFiles2 = scanFolder2.listFiles();
 
+        assert scanFiles1 != null;
+        int len1 = scanFiles1.length;
+        assert scanFiles2 != null;
+        int len2 = scanFiles2.length;
+
+        for (int i = 0; i < len1; i++) {
+            File file1 = scanFiles1[i];
+            List<File> word2vecFeatureFileList1 = Word2Vec.getWord2VecBySourceFile(file1);
+            List<File> hopeFeatureFileList1 = HOPE.getHOPEVecBySourceFile(file1);
+
+            for (int j = i + 1; j < len2; j++) {
+                File file2 = scanFiles2[j];
+                List<File> word2vecFeatureFileList2 = Word2Vec.getWord2VecBySourceFile(file2);
+                List<File> hopeFeatureFileList2 = HOPE.getHOPEVecBySourceFile(file2);
+
+                Detection.singleFileCloneDetection(word2vecFeatureFileList1, hopeFeatureFileList1, word2vecFeatureFileList2, hopeFeatureFileList2);
+            }
+        }
     }
 }
