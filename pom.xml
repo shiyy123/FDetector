@@ -14,7 +14,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass></mainClass>
+                            <mainClass>main.CLI</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

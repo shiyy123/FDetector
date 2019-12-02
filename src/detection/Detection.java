@@ -1,10 +1,14 @@
 package detection;
 
+import config.ENV;
 import embedding.HOPE;
 import embedding.Word2Vec;
 import feature.Feature;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +50,35 @@ public class Detection {
     }
 
     private static boolean isClone(List<Double> feature1, List<Double> feature2) {
+        File tmpFeatureFile = new File(ENV.TMP_PATH + File.separator + "feature.txt");
+        if (tmpFeatureFile.exists()) {
+            tmpFeatureFile.delete();
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (Double aDouble : feature1) {
+            sb.append(String.format("%.6f", aDouble));
+            sb.append(" ");
+        }
+        for (int i = 0; i < feature2.size() - 1; i++) {
+            sb.append(String.format("%.6f", feature2.get(i)));
+            sb.append(" ");
+        }
+        sb.append(String.format("%.6f", feature2.get(feature2.size() - 1)));
+        System.out.println(feature1.size() + feature2.size());
+        System.out.println(sb.toString());
+        try {
+            FileUtils.write(tmpFeatureFile, sb.toString(), StandardCharsets.UTF_8, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Process process = Runtime.getRuntime().exec("python3 ");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if (feature1.size() == feature2.size()) {
             return true;
         }
