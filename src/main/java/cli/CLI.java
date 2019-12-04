@@ -1,12 +1,9 @@
-package main;
+package cli;
 
 import detection.Detection;
 import embedding.HOPE;
 import embedding.Word2Vec;
-import feature.Feature;
-import function.Function;
 import org.apache.commons.cli.*;
-import representation.AST;
 
 import java.io.File;
 import java.util.List;
@@ -60,10 +57,16 @@ public class CLI {
         }
         String path1 = commandLine.getOptionValue("F1");
         File scanFolder1 = new File(path1);
+        if (!scanFolder1.exists()) {
+            System.out.println("F1 not found");
+        }
         File[] scanFiles1 = scanFolder1.listFiles();
 
         String path2 = commandLine.getOptionValue("F2");
         File scanFolder2 = new File(path2);
+        if (!scanFolder2.exists()) {
+            System.out.println("F2 not found");
+        }
         File[] scanFiles2 = scanFolder2.listFiles();
 
         assert scanFiles1 != null;
@@ -73,15 +76,34 @@ public class CLI {
 
         for (int i = 0; i < len1; i++) {
             File file1 = scanFiles1[i];
-            List<File> word2vecFeatureFileList1 = Word2Vec.getWord2VecBySourceFile(file1);
-            List<File> hopeFeatureFileList1 = HOPE.getHOPEVecBySourceFile(file1);
+
+//            List<File> word2vecFeatureFileList1 = Word2Vec.getWord2VecBySourceFile(file1);
+//            List<File> hopeFeatureFileList1 = HOPE.getHOPEVecBySourceFile(file1);
+            List<File> word2vecFeatureFileList1 = Word2Vec.getEmbeddingFileListBySourceFile(file1);
+            List<File> hopeFeatureFileList1 = HOPE.getEmbeddingFileListBySourceFile(file1);
+
+            if (word2vecFeatureFileList1.isEmpty()) {
+                System.out.println("w1 empty");
+            }
+            if (hopeFeatureFileList1.isEmpty()) {
+                System.out.println("h1 empty");
+            }
 
             for (int j = i + 1; j < len2; j++) {
                 File file2 = scanFiles2[j];
-                List<File> word2vecFeatureFileList2 = Word2Vec.getWord2VecBySourceFile(file2);
-                List<File> hopeFeatureFileList2 = HOPE.getHOPEVecBySourceFile(file2);
+//                List<File> word2vecFeatureFileList2 = Word2Vec.getWord2VecBySourceFile(file2);
+//                List<File> hopeFeatureFileList2 = HOPE.getHOPEVecBySourceFile(file2);
+                List<File> word2vecFeatureFileList2 = Word2Vec.getEmbeddingFileListBySourceFile(file2);
+                List<File> hopeFeatureFileList2 = HOPE.getEmbeddingFileListBySourceFile(file2);
 
-                Detection.singleFileCloneDetection(word2vecFeatureFileList1, hopeFeatureFileList1, word2vecFeatureFileList2, hopeFeatureFileList2);
+                if (word2vecFeatureFileList2.isEmpty()) {
+                    System.out.println("w2 empty");
+                }
+                if (hopeFeatureFileList2.isEmpty()) {
+                    System.out.println("h2 empty");
+                }
+
+                Detection.singleFileCloneDetection(file1, file2, word2vecFeatureFileList1, hopeFeatureFileList1, word2vecFeatureFileList2, hopeFeatureFileList2);
             }
         }
     }

@@ -6,7 +6,9 @@ import java.io.File;
  * @author cary.shi on 2019/11/28
  */
 public class ENV {
-    public static String base = "G:\\share\\CloneDetection\\data";
+//    public static String base = "G:\\share\\CloneDetection\\data";
+
+    public static String base = "/workspace/";
 
     public static String WORK_SPACE = "/workspace/";
 
@@ -24,6 +26,9 @@ public class ENV {
     public static String EMBEDDING_FEATURE_WORD2VEC_PATH = base + File.separator + "embedding_feature_word2vec";
     public static String EMBEDDING_FUNC_HOPE_PATH = base + File.separator + "embedding_func_HOPE";
     public static String EMBEDDING_FEATURE_HOPE_PATH = base + File.separator + "embedding_feature_HOPE";
+
+    public static String IDENT_EMBED_PATH = base + File.separator + "identEmbed";
+    public static String CFG_EMBED_PATH = base + File.separator + "cfgEmbed";
 
     public static String TMP_PATH = base + File.separator + "tmp";
 }

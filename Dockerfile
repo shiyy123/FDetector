@@ -6,13 +6,17 @@ RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted
 
 RUN apt-get update && \
 apt-get install -y --no-install-recommends apt-utils \
+python3-pip
 openjdk-8-jdk-headless && \
 rm -rf /var/lib/apt/lists/*
 
-COPY tmp/EmbeddingLearning /scanner
+RUN echo "[global] index-url = https://pypi.tuna.tsinghua.edu.cn/simple [install] trusted-host=mirrors.aliyun.com" >~/.pip/pip.conf
+RUN pip3 install torch==1.3.1+cpu torchvision==0.4.2+cpu -f https://download.pytorch.org/whl/torch_stable.html
+
+COPY . /scanner
 
 ENV PATH /scanner/Bash:${PATH}
 ENV LANG C.UTF-8
 
 WORKDIR /workspace
-ENTRYPOINT ["/bin/sh", "/scanner/bin/cscanner"]
+ENTRYPOINT ["/bin/sh", "/scanner/bin/CloneDetect"]

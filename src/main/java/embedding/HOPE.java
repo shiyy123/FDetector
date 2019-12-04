@@ -40,6 +40,15 @@ public class HOPE {
         return res;
     }
 
+    public static List<File> getEmbeddingFileListBySourceFile(File sourceFile) {
+        String folderAndFilePath = Tool.getFolderAndFilePath(sourceFile);
+        File[] embedFiles = new File(ENV.CFG_EMBED_PATH + File.separator + folderAndFilePath).listFiles();
+        List<File> res = new ArrayList<>();
+        assert embedFiles != null;
+        Collections.addAll(res, embedFiles);
+        return res;
+    }
+
     public static List<File> getHOPEVecBySourceFile(File sourceFile) {
         List<File> featureList = getFeatureVecFileListBySourceFile(sourceFile);
         if (featureList != null) {

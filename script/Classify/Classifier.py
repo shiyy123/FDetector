@@ -60,7 +60,7 @@ if __name__ == '__main__':
     loss_func = torch.nn.CrossEntropyLoss()
 
     train_data, test_data, train_label, test_label = \
-        get_data('G:\\share\\CloneDetection\\data\\csv\\1,2_train_ident_merge.csv')
+        get_data('G:\\share\\CloneData\\data\\csv\\1,2_train_ident_merge.csv')
 
     for epoch in range(1000):
         out = net(train_data.cuda())
