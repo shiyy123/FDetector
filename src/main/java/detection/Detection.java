@@ -7,11 +7,14 @@ import feature.Feature;
 import org.apache.commons.io.FileUtils;
 import tool.ProcessExecutor;
 import tool.ProcessUtils;
+import tool.Tool;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -43,11 +46,49 @@ public class Detection {
                 feature2.addAll(hopeVec2);
 
                 if (isClone(feature1, feature2)) {
-                    System.out.println(file1.getAbsolutePath() + " and " + file2.getAbsolutePath() + " has clone in feature " + i + " and " + j);
+                    System.out.println(file1.getAbsolutePath() + " feature " + i + "[" + getFuncNamesByFeatureId(file1, i) + "] and "
+                            + file2.getAbsolutePath() + " feature " + j + "[" + getFuncNamesByFeatureId(file2, j) +
+                            "] is functional code clone");
                 }
-
             }
         }
+    }
+
+    private static String getFuncNamesByFeatureId(File sourceCodeFile, int id) {
+        String folderAndFilePath = Tool.getFolderAndFilePath(sourceCodeFile);
+        File featureFile = new File(ENV.FEATURE_PATH + File.separator + folderAndFilePath + File.separator + "feature.txt");
+        File funcFile = new File(ENV.FUNC_PATH + File.separator + folderAndFilePath + File.separator + "func.txt");
+
+        HashMap<Integer, String> map = new HashMap<>();
+        List<String> funcList = new ArrayList<>();
+
+        try {
+            funcList = FileUtils.readLines(funcFile, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (String row : funcList) {
+            String[] cols = row.split("\t");
+            map.put(Integer.parseInt(cols[1]), cols[0]);
+        }
+
+        List<String> featureStringList = new ArrayList<>();
+        try {
+            featureStringList = FileUtils.readLines(featureFile, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String funcIdLine = featureStringList.get(id);
+        funcIdLine = funcIdLine.substring(funcIdLine.indexOf('[') + 1, funcIdLine.indexOf(']'));
+        String[] funcIds = funcIdLine.split(",");
+
+        StringBuilder res = new StringBuilder();
+        for (String funcId : funcIds) {
+            res.append(map.getOrDefault(Integer.parseInt(funcId.trim()), "unknown"));
+            res.append("(").append(funcId.trim()).append(")").append(",");
+        }
+        return res.toString().substring(0, res.length() - 1);
     }
 
     private static boolean isClone(List<Double> feature1, List<Double> feature2) {

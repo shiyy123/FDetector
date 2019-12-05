@@ -31,4 +31,6 @@ public class ENV {
     public static String CFG_EMBED_PATH = base + File.separator + "cfgEmbed";
 
     public static String TMP_PATH = base + File.separator + "tmp";
+
+    public static String FEATURE_CONTENT_PATH = base + File.separator + "feature_content";
 }
