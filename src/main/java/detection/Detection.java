@@ -22,9 +22,10 @@ import java.util.List;
  */
 public class Detection {
 
-    public static void singleFileCloneDetection(File file1, File file2,
-                                                List<File> word2vecFeatureFileList1, List<File> hopeFeatureFileList1,
-                                                List<File> word2vecFeatureFileList2, List<File> hopeFeatureFileList2) {
+    public static boolean singleFileCloneDetection(File file1, File file2,
+                                                   List<File> word2vecFeatureFileList1, List<File> hopeFeatureFileList1,
+                                                   List<File> word2vecFeatureFileList2, List<File> hopeFeatureFileList2) {
+        boolean flag = false;
         int len1 = word2vecFeatureFileList1.size(), len2 = word2vecFeatureFileList2.size();
         for (int i = 0; i < len1; i++) {
             File word2vec1 = word2vecFeatureFileList1.get(i);
@@ -46,12 +47,14 @@ public class Detection {
                 feature2.addAll(hopeVec2);
 
                 if (isClone(feature1, feature2)) {
+                    flag = true;
                     System.out.println(file1.getAbsolutePath() + " feature " + i + "[" + getFuncNamesByFeatureId(file1, i) + "] and "
                             + file2.getAbsolutePath() + " feature " + j + "[" + getFuncNamesByFeatureId(file2, j) +
                             "] is functional code clone");
                 }
             }
         }
+        return flag;
     }
 
     private static String getFuncNamesByFeatureId(File sourceCodeFile, int id) {

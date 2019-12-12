@@ -92,6 +92,7 @@ public class CLI {
         int len1 = scanFiles1.length;
         assert scanFiles2 != null;
         int len2 = scanFiles2.length;
+        boolean flag = false;
 
         for (int i = 0; i < len1; i++) {
             File file1 = scanFiles1[i];
@@ -125,8 +126,14 @@ public class CLI {
                     System.out.println("h2 empty");
                 }
 
-                Detection.singleFileCloneDetection(file1, file2, word2vecFeatureFileList1, hopeFeatureFileList1, word2vecFeatureFileList2, hopeFeatureFileList2);
+                if (Detection.singleFileCloneDetection(file1, file2, word2vecFeatureFileList1, hopeFeatureFileList1, word2vecFeatureFileList2, hopeFeatureFileList2)) {
+                    flag = true;
+                }
             }
+        }
+        if(!flag){
+            System.out.println("No functional code clone is detected");
+            return;
         }
         System.out.println("Please input the feature location and id");
         Scanner scanner = new Scanner(System.in);
