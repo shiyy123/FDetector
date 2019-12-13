@@ -1,0 +1,1 @@
+main	1	/home/cary/data/src/1/1.c

@@ -1,0 +1,1 @@
+main	9	/home/cary/data/src/2/5.c

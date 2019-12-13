@@ -1,0 +1,3 @@
+main	6	/home/cary/data/src/1/4.c
+sum	7	/home/cary/data/src/1/4.c
+print	8	/home/cary/data/src/1/4.c

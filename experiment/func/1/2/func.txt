@@ -1,0 +1,2 @@
+main	2	/home/cary/data/src/1/2.c
+sum	3	/home/cary/data/src/1/2.c
